@@ -1,0 +1,19 @@
+version: '3.8'
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    container_name: rmq_todo
+    restart: always
+    ports:
+      - 5672:5672
+      - 8080:15672
+    env_file:
+      - .env
+    networks:
+      - todoservice
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASS}
+networks:
+  todoservice:
+    driver: bridge
