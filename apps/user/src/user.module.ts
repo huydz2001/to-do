@@ -1,15 +1,18 @@
 import { MongoModule, RabbitMQConfigModule } from '@app/common';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserController } from './user.controller';
-import { UserService } from './services/user.service';
-import * as Joi from 'joi';
+import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from './schema/user.schema';
-import { UserRepository } from './repositories/user.repository';
-import { TASK_EXCHANGE, USER_EXCHANGE } from './common/constants/user';
+import * as Joi from 'joi';
+import {
+  TASK_EXCHANGE,
+  TYPE_EXCHANGE,
+  USER_EXCHANGE,
+} from './common/constants/user';
 import { UserFactory } from './factories/user.factory';
+import { UserRepository } from './repositories/user.repository';
+import { User, UserSchema } from './schema/user.schema';
+import { UserService } from './services/user.service';
+import { UserController } from './user.controller';
 
 @Module({
   imports: [
@@ -21,8 +24,8 @@ import { UserFactory } from './factories/user.factory';
       }),
     }),
     RabbitMQConfigModule.register([
-      { name: USER_EXCHANGE, type: 'topic' },
-      { name: TASK_EXCHANGE, type: 'topic' },
+      { name: USER_EXCHANGE, type: TYPE_EXCHANGE },
+      { name: TASK_EXCHANGE, type: TYPE_EXCHANGE },
     ]),
     MongoModule,
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),

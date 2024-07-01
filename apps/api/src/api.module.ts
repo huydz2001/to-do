@@ -3,13 +3,17 @@ import { Module } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ApiController } from './api.controller';
 import { ApiService } from './services/api.service';
-import { TASK_EXCHANGE, USER_EXCHANGE } from './common/constants';
+import {
+  TASK_EXCHANGE,
+  TYPE_EXCHANGE,
+  USER_EXCHANGE,
+} from './common/constants';
 
 @Module({
   imports: [
     RabbitMQConfigModule.register([
-      { name: USER_EXCHANGE, type: 'topic' },
-      { name: TASK_EXCHANGE, type: 'topic' },
+      { name: USER_EXCHANGE, type: TYPE_EXCHANGE },
+      { name: TASK_EXCHANGE, type: TYPE_EXCHANGE },
     ]),
   ],
   controllers: [ApiController],

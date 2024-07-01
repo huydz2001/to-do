@@ -1,8 +1,9 @@
 export const USER_EXCHANGE = 'users';
 export const TASK_EXCHANGE = 'tasks';
-export const USER_CREATED_ROUTING_KEY = 'users.created';
-export const USER_DELETED_ROUTING_KEY = 'users.deleted';
-export const USER_UPDATED_ROUTING_KEY = 'users.updated';
-export const TASK_CREATED_ROUTING_KEY = 'tasks.created';
-export const TASK_DELETED_ROUTING_KEY = 'tasks.deleted';
-export const TASK_UPDATED_ROUTING_KEY = 'tasks.updated';
+export const TYPE_EXCHANGE = 'topic';
+export const USER_CREATED_USER_ROUTING_KEY = 'users.created.user';
+export const USER_DELETED_USER_ROUTING_KEY = 'users.deleted.user';
+export const USER_UPDATED_USER_ROUTING_KEY = 'users.updated.user';
+export const TASK_CREATED_TASK_ROUTING_KEY = 'tasks.created.task';
+export const TASK_DELETED_TASK_ROUTING_KEY = 'tasks.deleted.task';
+export const TASK_UPDATED_TASK_ROUTING_KEY = 'tasks.updated.task';
