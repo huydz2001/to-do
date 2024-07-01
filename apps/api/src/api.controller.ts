@@ -1,24 +1,37 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Patch,
+  Post,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
+import { AuthGuard } from './auth/auth.guard';
+import {
+  CreateUserRequestDto,
+  LoginUserRequestDto,
+  UpdateUserRequestDto,
+} from './dtos/users';
 import { ApiService } from './services/api.service';
-import { CreateUserRequestDto } from 'apps/user/src/dtos/createUserRequest.dto';
 
 @Controller()
 export class ApiController {
   constructor(private readonly apiService: ApiService) {}
 
-  @Get()
-  getHello(): string {
-    return this.apiService.getHello();
-  }
-
-  @Post('user')
+  @Post('users')
   createUser(@Body() user: CreateUserRequestDto) {
     return this.apiService.createUser(user);
   }
 
-  @Post('task')
-  createTask() {
-    console.log(123);
-    return this.apiService.createTask();
+  @Post('users/login')
+  login(@Body() user: LoginUserRequestDto) {
+    return this.apiService.sigin(user);
+  }
+
+  @UseGuards(AuthGuard)
+  @Patch('users/:id/update')
+  update(@Body() user: UpdateUserRequestDto, @Request() req) {
+    const id = req['user'].userId;
+    return this.apiService.update(id, user);
   }
 }

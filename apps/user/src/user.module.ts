@@ -1,15 +1,18 @@
-import { MongoModule, RabbitMQConfigModule } from '@app/common';
-import { RabbitMQModule } from '@golevelup/nestjs-rabbitmq';
+import {
+  MongoModule,
+  RabbitMQConfigModule,
+  TASK_EXCHANGE,
+  USER_EXCHANGE,
+} from '@app/common';
 import { Module } from '@nestjs/common';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import { UserController } from './user.controller';
-import { UserService } from './services/user.service';
-import * as Joi from 'joi';
+import { ConfigModule } from '@nestjs/config';
 import { MongooseModule } from '@nestjs/mongoose';
-import { User, UserSchema } from './schema/user.schema';
-import { UserRepository } from './repositories/user.repository';
-import { TASK_EXCHANGE, USER_EXCHANGE } from './common/constants/user';
+import * as Joi from 'joi';
 import { UserFactory } from './factories/user.factory';
+import { UserRepository } from './repositories/user.repository';
+import { User, UserSchema } from './schema/user.schema';
+import { UserService } from './services/user.service';
+import { UserController } from './user.controller';
 
 @Module({
   imports: [

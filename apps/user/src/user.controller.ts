@@ -1,13 +1,14 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { UserService } from './services/user.service';
-import { CreateUserRequestDto } from './dtos/createUserRequest.dto';
+import { CreateUserRequestDto } from '../../api/src/dtos/users/createUserRequest.dto';
 
-@Controller('user')
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Post('')
-  async crateUser(@Body() request: CreateUserRequestDto) {
-    return await this.userService.crateUser(request);
+  @Get()
+  async findUserByEmail(@Query('email') email: string) {
+    const user = await this.userService.findByEmail(email);
+    return user;
   }
 }

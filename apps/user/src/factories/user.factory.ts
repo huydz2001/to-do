@@ -1,5 +1,5 @@
 import { hashPass } from 'apps/api/src/common/utils';
-import { CreateUserRequestDto } from '../dtos/createUserRequest.dto';
+import { CreateUserRequestDto } from '../../../api/src/dtos/users/createUserRequest.dto';
 import { User } from '../schema/user.schema';
 
 export class UserFactory {

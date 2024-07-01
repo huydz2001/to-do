@@ -3,7 +3,7 @@ import { Injectable, Logger } from '@nestjs/common';
 import { InjectConnection, InjectModel } from '@nestjs/mongoose';
 import { User } from '../schema/user.schema';
 import { Connection, Model } from 'mongoose';
-import { CreateUserRequestDto } from '../dtos/createUserRequest.dto';
+import { CreateUserRequestDto } from '../../../api/src/dtos/users/createUserRequest.dto';
 
 @Injectable()
 export class UserRepository extends AbstractRepository<User> {

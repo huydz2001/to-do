@@ -1,29 +1,76 @@
+import {
+  USER_CREATE_USER_ROUTING_KEY,
+  USER_EXCHANGE,
+  USER_FIND_USER_ROUTING_KEY,
+  USER_UPDATE_USER_ROUTING_KEY,
+} from '@app/common';
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
-import { Injectable } from '@nestjs/common';
-import { USER_CREATED_ROUTING_KEY, USER_EXCHANGE } from '../common/constants';
-import { CreateUserRequestDto } from 'apps/user/src/dtos/createUserRequest.dto';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
+import { User } from 'apps/user/src/schema/user.schema';
+import * as bcrypt from 'bcrypt';
+import {
+  CreateUserRequestDto,
+  LoginUserRequestDto,
+  UpdateUserRequestDto,
+} from '../dtos/users';
 
 @Injectable()
 export class ApiService {
-  constructor(private ampConnection: AmqpConnection) {}
-  getHello(): string {
-    return 'Hello World!';
+  constructor(
+    private ampConnection: AmqpConnection,
+    private readonly jwtService: JwtService,
+  ) {}
+
+  async createUser(request: CreateUserRequestDto) {
+    const response = await this.ampConnection.request({
+      exchange: USER_EXCHANGE,
+      routingKey: USER_CREATE_USER_ROUTING_KEY,
+      payload: {
+        data: request,
+      },
+    });
+    return response;
   }
 
-  createUser(user: CreateUserRequestDto) {
-    this.ampConnection.publish(USER_EXCHANGE, USER_CREATED_ROUTING_KEY, {
-      data: user,
+  async sigin(request: LoginUserRequestDto) {
+    const userResponse: User = await this.ampConnection.request({
+      exchange: USER_EXCHANGE,
+      routingKey: USER_FIND_USER_ROUTING_KEY,
+      payload: {
+        data: request.email,
+      },
     });
-    console.log('message publish:', user);
+
+    if (!bcrypt.compare(request.password, userResponse?.password)) {
+      throw new UnauthorizedException();
+    }
+
+    const payload = {
+      userId: userResponse._id,
+      username: userResponse.user_name,
+    };
+    return {
+      access_token: await this.jwtService.signAsync(payload),
+    };
   }
 
-  createTask() {
-    this.ampConnection.publish('tasks', 'tasks-route', {
-      type: 'create',
-      data: { task_name: 'test', start_date: '2024-06-28' },
+  async update(id: any, request: UpdateUserRequestDto) {
+    const userResponse: User = await this.ampConnection.request({
+      exchange: USER_EXCHANGE,
+      routingKey: USER_UPDATE_USER_ROUTING_KEY,
+      payload: {
+        data: request,
+        userId: id,
+      },
     });
-    console.log('message publish:', {
-      data: { task_name: 'test', start_date: '2024-06-28' },
-    });
+
+    if (userResponse) {
+      return {
+        code: 'MSG001',
+        message: 'Success',
+        data: null,
+      };
+    }
   }
 }
