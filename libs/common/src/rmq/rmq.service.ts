@@ -1,4 +1,5 @@
-import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
+import { AmqpConnection, RabbitSubscribe } from '@golevelup/nestjs-rabbitmq';
+import { Subscriber } from 'rxjs';
 
 export class RabbitMQService {
   constructor(private readonly ampConnection: AmqpConnection) {}
