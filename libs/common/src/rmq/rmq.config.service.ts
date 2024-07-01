@@ -17,7 +17,7 @@ export class RabbitMQConfigService {
     const RMQ_PORT = this.configService.get('RABBITMQ_PORT');
 
     const queues: RabbitMQQueueConfig[] = exchanges.map((exchange) => ({
-      name: `${exchange.name}.#.*`,
+      name: `${exchange.name}.#`,
       exchange: exchange.name,
     }));
 
