@@ -5,8 +5,8 @@ import { Injectable } from '@nestjs/common';
 export class TaskService {
   @RabbitSubscribe({
     exchange: 'tasks',
-    routingKey: 'tasks-route',
-    queue: 'tasks-queue',
+    routingKey: 'tasks.crated',
+    queue: 'tasks.#',
   })
   createTask(msg: {}) {
     console.log('Message response: ', msg);

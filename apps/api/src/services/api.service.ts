@@ -1,5 +1,7 @@
 import { AmqpConnection } from '@golevelup/nestjs-rabbitmq';
 import { Injectable } from '@nestjs/common';
+import { USER_CREATED_ROUTING_KEY, USER_EXCHANGE } from '../common/constants';
+import { CreateUserRequestDto } from 'apps/user/src/dtos/createUserRequest.dto';
 
 @Injectable()
 export class ApiService {
@@ -8,12 +10,11 @@ export class ApiService {
     return 'Hello World!';
   }
 
-  createUser() {
-    this.ampConnection.publish('users', 'users-route', {
-      type: 'create',
-      data: { name: 'test', age: '23' },
+  createUser(user: CreateUserRequestDto) {
+    this.ampConnection.publish(USER_EXCHANGE, USER_CREATED_ROUTING_KEY, {
+      data: user,
     });
-    console.log('message publish:', { data: { name: 'test', age: '23' } });
+    console.log('message publish:', user);
   }
 
   createTask() {
